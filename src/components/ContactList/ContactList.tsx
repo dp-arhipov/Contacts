@@ -12,9 +12,10 @@ const ContactList: React.FC<ContactListProps> = ({contacts}) => {
       {contacts.map(contact => {
         return (
           <ContactCard
-            key={contact.phoneNumber}
+            key={contact.id}
             name={contact.name}
-            phoneNumber={contact.phoneNumber}
+            phone={contact.phone}
+            email={contact.email}
           />
         );
       })}

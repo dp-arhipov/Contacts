@@ -1,12 +1,17 @@
 // eslint-disable-next-line import/named
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Contact} from '../../types';
+import {getContacts} from '../actions/contactsActions';
 import {RootState} from '../index';
 interface initialStateType {
+  isLoading: boolean;
+  error: string;
   data: Contact[];
 }
 
 const initialState: initialStateType = {
+  isLoading: false,
+  error: '',
   data: [],
 };
 
@@ -16,6 +21,20 @@ export const contactsSlice = createSlice({
   reducers: {
     addContacts(state, action: PayloadAction<Contact[]>) {
       state.data = [...state.data, ...action.payload];
+    },
+  },
+  extraReducers: {
+    [getContacts.fulfilled.type]: (state, action: PayloadAction<Contact[]>) => {
+      state.isLoading = false;
+      state.error = '';
+      state.data = action.payload;
+    },
+    [getContacts.pending.type]: state => {
+      state.isLoading = true;
+    },
+    [getContacts.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
 });
