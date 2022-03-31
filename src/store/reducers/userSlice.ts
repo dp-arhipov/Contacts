@@ -21,6 +21,11 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    // setParms(state, payload) {
+    //   const {name, id} = payload;
+    //   if (name) state.name = name;
+    //   if (id) state.id = id;
+    // },
     logout(state) {
       state = initialState;
     },
@@ -44,6 +49,6 @@ export const userSlice = createSlice({
 });
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectContactsData = (state: RootState) => state.contacts.data;
+export const selectUserData = (state: RootState) => state.user;
 
 export default userSlice.reducer;

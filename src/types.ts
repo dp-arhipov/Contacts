@@ -8,3 +8,8 @@ export interface User {
   id: number;
   name: string;
 }
+
+export interface AuthData {
+  login: string;
+  password: string;
+}

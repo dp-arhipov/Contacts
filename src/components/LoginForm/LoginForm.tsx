@@ -7,6 +7,7 @@ import {string, object} from 'yup';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useAppDispatch} from '../../hooks/redux';
+import {AuthData} from '../../types';
 
 const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,10 +31,9 @@ const LoginForm: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  // type dataType = InferType<typeof schema>;
-
   const handleForm = async (data: any) => {
-    //await dispatch(login(data.login, data.password));
+    const c = await dispatch(login({login: data.login, password: data.password}));
+    console.log(c.payload.email);
   };
 
   return (
