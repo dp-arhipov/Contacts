@@ -6,6 +6,8 @@ import SearchField from '../../components/SearchField';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
 import {selectContactsData} from '../../store/reducers/ContactsSlice';
 import {getContacts} from '../../store/actions/contactsActions';
+import Header from '../../components/Header/Header';
+
 const Contacts: React.FC = () => {
   const dispatch = useAppDispatch();
   const contacts_ = useAppSelector(selectContactsData);
@@ -16,6 +18,7 @@ const Contacts: React.FC = () => {
 
   return (
     <div className={styles.contacts}>
+      <Header />
       <Container maxWidth="sm" sx={{height: '100%'}}>
         <div className={styles.wrapper}>
           <div className={styles.searchField}>
