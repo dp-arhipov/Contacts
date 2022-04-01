@@ -26,8 +26,8 @@ export const userSlice = createSlice({
     //   if (name) state.name = name;
     //   if (id) state.id = id;
     // },
-    logout(state) {
-      state = initialState;
+    logout() {
+      return {...initialState};
     },
   },
   extraReducers: {
@@ -49,6 +49,7 @@ export const userSlice = createSlice({
 });
 
 // Other code such as selectors can use the imported `RootState` type
+export const {logout} = userSlice.actions;
 export const selectUserData = (state: RootState) => state.user;
 export const isUserLoggedIn = (state: RootState) => (state.user.id ? true : false);
 

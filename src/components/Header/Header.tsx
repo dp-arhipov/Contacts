@@ -14,13 +14,13 @@ import Menu from '@mui/material/Menu';
 import {isUserLoggedIn} from '../../store/reducers/userSlice';
 import {useSelector} from 'react-redux';
 
-import {logOut} from '../../store/reducers/userSlice';
+import {logout} from '../../store/reducers/userSlice';
 import {useAppDispatch} from '../../hooks/redux';
 
 export default function MenuAppBar() {
   const dispatch = useAppDispatch();
   const handleLogOut = () => {
-    dispatch(logOut());
+    dispatch(logout());
   };
 
   return (

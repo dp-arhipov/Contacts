@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import ContactList from '../../components/ContactList';
 import SearchField from '../../components/SearchField';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
-import {selectContactsData} from '../../store/reducers/ContactsSlice';
+import {selectContactsData} from '../../store/reducers/contactsSlice';
 import {getContacts} from '../../store/actions/contactsActions';
 import Header from '../../components/Header/Header';
 
