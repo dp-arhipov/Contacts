@@ -8,9 +8,11 @@ import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useAppDispatch} from '../../hooks/redux';
 import {AuthData} from '../../types';
+import {Navigate, useNavigate} from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const schema = object({
     login: string()
@@ -33,7 +35,7 @@ const LoginForm: React.FC = () => {
 
   const handleForm = async (data: any) => {
     const c = await dispatch(login({login: data.login, password: data.password}));
-    console.log(c.payload.email);
+    navigate('/');
   };
 
   return (
