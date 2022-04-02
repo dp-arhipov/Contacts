@@ -1,13 +1,14 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import styles from './login.module.scss';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import LoginForm from '../../components/LoginForm';
+import CenterXY from '../../components/CenterXY';
 
 const Login: React.FC = () => {
   return (
     <div className={styles.login}>
-      <LoginForm />
+      <CenterXY>
+        <LoginForm />
+      </CenterXY>
     </div>
   );
 };
