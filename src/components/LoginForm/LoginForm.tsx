@@ -1,18 +1,18 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import styles from './loginForm.module.scss';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {login} from '../../store/actions/userActions';
+// import {login} from '../../store/actions/userActions';
 import {string, object} from 'yup';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useAppDispatch} from '../../hooks/redux';
-import {AuthData} from '../../types';
-import {Navigate, useNavigate} from 'react-router-dom';
+
+import {useNavigate} from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const LoginForm: React.FC = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const {login} = useAuth();
 
   const schema = object({
     login: string()
@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
   });
 
   const handleForm = async (data: any) => {
-    const c = await dispatch(login({login: data.login, password: data.password}));
+    await login({login: data.login, password: data.password});
     navigate('/');
   };
 

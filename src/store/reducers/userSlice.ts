@@ -21,11 +21,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    // setParms(state, payload) {
-    //   const {name, id} = payload;
-    //   if (name) state.name = name;
-    //   if (id) state.id = id;
-    // },
+    setUser(state, action) {
+      return {...action.payload};
+    },
     logout() {
       return {...initialState};
     },
@@ -49,7 +47,7 @@ export const userSlice = createSlice({
 });
 
 // Other code such as selectors can use the imported `RootState` type
-export const {logout} = userSlice.actions;
+export const {setUser, logout} = userSlice.actions;
 export const selectUserData = (state: RootState) => state.user;
 export const isUserLoggedIn = (state: RootState) => (state.user.id ? true : false);
 

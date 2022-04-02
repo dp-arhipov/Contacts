@@ -1,11 +1,11 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {AuthData} from '../../types';
+import {AuthData, User} from '../../types';
 
 export const login = createAsyncThunk('user/login', async (data: AuthData) => {
   try {
-    const {login, password} = data;
-    //fetchUserDataFunction(login,password)
-    return {email: login, name: 'Admin', id: 1};
+    const {login} = data;
+    const userData: User = {login, name: 'Admin', id: 1};
+    return userData;
   } catch (e) {
     return e.value;
   }
