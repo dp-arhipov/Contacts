@@ -20,8 +20,12 @@ export const contactsSlice = createSlice({
   initialState,
   reducers: {
     addContacts(state, action: PayloadAction<Contact[]>) {
-      state.data = [...state.data, ...action.payload];
+      state.data = [...action.payload, ...state.data];
     },
+    // updateContact(state, action: PayloadAction<Contact>) {
+    //   state.data.filter(item=>item.id == action.payload.id )
+    //   state.data = [...action.payload, ...state.data];
+    // },
   },
   extraReducers: {
     [getContacts.fulfilled.type]: (state, action: PayloadAction<Contact[]>) => {

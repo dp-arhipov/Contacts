@@ -4,24 +4,24 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import {Contact} from '../../types';
 
-type ContactCardProps = {
-  phone: string;
-  email: string;
-  name: string;
-};
+interface ContactCardProps {
+  data: Contact;
+  onClick: () => void;
+}
 
-const ContactCard: React.FC<ContactCardProps> = ({name, phone, email}) => {
+const ContactCard: React.FC<ContactCardProps> = ({data, onClick}) => {
   return (
     <div className={styles.contactCard}>
-      <ListItem button>
+      <ListItem button onClick={onClick}>
         <ListItemAvatar>
           <Avatar alt="Profile Picture" />
         </ListItemAvatar>
-        <ListItemText primary={name} secondary={email} />
+        <ListItemText primary={data.name} secondary={data.email} />
       </ListItem>
     </div>
   );
 };
 
-export default ContactCard;
+export default React.memo(ContactCard);
