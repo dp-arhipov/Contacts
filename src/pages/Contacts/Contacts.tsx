@@ -4,7 +4,7 @@ import Container from '@mui/material/Container';
 import ContactList from '../../components/ContactList';
 import SearchField from '../../components/SearchField';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
-import {selectContactsData} from '../../store/reducers/contactsSlice';
+import {deleteContact, lastContactId, selectContactsData} from '../../store/reducers/contactsSlice';
 import {getContacts} from '../../store/actions/contactsActions';
 import Header from '../../components/Header/Header';
 import Modal from '../../components/Modal';
@@ -16,24 +16,37 @@ import AddButton from '../../components/AddButton';
 const Contacts: React.FC = () => {
   const dispatch = useAppDispatch();
   const contacts = useAppSelector(selectContactsData);
+  const lastId = useAppSelector(lastContactId);
   const [open, setOpen] = useState(false);
-  const [contactIdtoWorkWith, setContactIdtoWorkWith] = useState<number>();
+  const [contactIdtoWorkWith, setContactIdtoWorkWith] = useState<Contact['id']>();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleModify = (id: Contact['id'] | undefined) => {
+  const handleEdit = (id: Contact['id'] | undefined) => {
     setContactIdtoWorkWith(id);
     handleOpen();
   };
+
+  const handleDelete = (id: Contact['id']) => {
+    dispatch(deleteContact(id));
+  };
+
   useEffect(() => {
     dispatch(getContacts());
   }, [dispatch]);
 
+  const emptyContact: Contact = {
+    id: lastId + 1,
+    name: '',
+    email: '',
+    phone: '',
+  };
+  console.log(lastId);
   return (
     <div className={styles.contacts}>
       <Modal isOpen={open} onClose={handleClose}>
         <ContactModifyForm
           onClose={handleClose}
-          data={undefined || contacts.filter(item => item.id == contactIdtoWorkWith)[0]}
+          data={contacts.filter(item => item.id == contactIdtoWorkWith)[0] || emptyContact}
         />
       </Modal>
       <Header />
@@ -45,7 +58,7 @@ const Contacts: React.FC = () => {
 
           <div className={styles.contactList}>
             <div className={styles.buttonWrapper}>
-              <AddButton onClick={() => handleModify(undefined)} />
+              <AddButton onClick={() => handleEdit(undefined)} />
             </div>
             <ContactList>
               {contacts.map(contact => {
@@ -53,7 +66,8 @@ const Contacts: React.FC = () => {
                   <ContactCard
                     key={contact.id}
                     data={contact}
-                    onClick={() => handleModify(contact.id)}
+                    onEdit={() => handleEdit(contact.id)}
+                    onDelete={() => handleDelete(contact.id)}
                   />
                 );
               })}

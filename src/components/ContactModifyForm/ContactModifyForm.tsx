@@ -5,13 +5,13 @@ import TextField from '@mui/material/TextField';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {string, object} from 'yup';
-import {addContacts} from '../../store/reducers/contactsSlice';
+import {addContacts, updateContact} from '../../store/reducers/contactsSlice';
 import {useAppDispatch} from '../../hooks/redux';
 import {Contact} from '../../types';
 
 interface ContactModalContent {
   onClose: () => void;
-  data?: Contact;
+  data: Contact;
 }
 
 const ContactModifyForm: React.FC<ContactModalContent> = ({onClose, data}) => {
@@ -37,8 +37,15 @@ const ContactModifyForm: React.FC<ContactModalContent> = ({onClose, data}) => {
     resolver: yupResolver(schema),
   });
 
-  const handleForm = async (data: any) => {
-    dispatch(addContacts([{name: data.name, email: data.email, id: 435, phone: ''}]));
+  const handleForm = async (formData: any) => {
+    console.log(data);
+    console.log(formData);
+
+    if (data.name.length == 0) {
+      dispatch(addContacts([{name: formData.name, email: formData.email, id: data.id, phone: ''}]));
+    } else {
+      dispatch(updateContact({name: formData.name, email: formData.email, id: data.id, phone: ''}));
+    }
     onClose();
   };
 
