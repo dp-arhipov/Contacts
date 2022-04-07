@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import styles from './contactModifyForm.module.scss';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -8,6 +8,7 @@ import {string, object} from 'yup';
 import {addContacts, updateContact} from '../../store/reducers/contactsSlice';
 import {useAppDispatch} from '../../hooks/redux';
 import {Contact} from '../../types';
+import {Typography} from '@mui/material';
 
 interface ContactModalContent {
   onClose: () => void;
@@ -16,16 +17,25 @@ interface ContactModalContent {
 
 const ContactModifyForm: React.FC<ContactModalContent> = ({onClose, data}) => {
   const dispatch = useAppDispatch();
+  const isNewContact = data.name.length == 0;
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   const schema = object({
     name: string()
-      .min(3, 'Логин должен быть длиннее 3х символов')
-      .required('это поле нужно заполнить'),
+      .min(3, 'Имя должно быть длиннее 3х символов')
+      .required('Это поле нужно заполнить'),
     email: string()
+      .transform(value => (!value ? null : value))
       .email('Введите корректный email')
-      .min(3, 'email не может быть короче 3х символов')
-      .required('это поле нужно заполнить'),
-  }).required();
+      .min(5, 'Email не может быть короче 5 символов')
+      .nullable(),
+    phone: string()
+      .transform(value => (!value ? null : value))
+      // .matches(phoneRegExp, 'Некорректный телефон')
+      .min(5, 'Телефон не может быть короче 5 символов')
+      .nullable(),
+  });
 
   const {
     register,
@@ -38,35 +48,52 @@ const ContactModifyForm: React.FC<ContactModalContent> = ({onClose, data}) => {
   });
 
   const handleForm = async (formData: any) => {
-    console.log(data);
-    console.log(formData);
-
-    if (data.name.length == 0) {
-      dispatch(addContacts([{name: formData.name, email: formData.email, id: data.id, phone: ''}]));
+    if (isNewContact) {
+      dispatch(
+        addContacts([{name: formData.name, email: formData.email, id: data.id, phone: data.phone}])
+      );
     } else {
-      dispatch(updateContact({name: formData.name, email: formData.email, id: data.id, phone: ''}));
+      dispatch(
+        updateContact({
+          name: formData.name,
+          email: formData.email,
+          id: data.id,
+          phone: formData.phone,
+        })
+      );
     }
     onClose();
   };
 
   return (
     <div className={styles.contactModifyForm}>
+      <Typography variant="h5" className={styles.title}>
+        {isNewContact ? <Fragment>Создать контакт</Fragment> : <Fragment>Изменить данные</Fragment>}
+      </Typography>
       <form className={styles.form} onSubmit={handleSubmit(handleForm)}>
         <TextField
           {...register('name')}
-          error={errors.name}
+          error={!!errors?.name}
           helperText={errors?.name?.message}
-          defaultValue={data?.name}
+          defaultValue={data.name}
           label="Имя"
-          variant="outlined"
+          variant="standard"
         />
         <TextField
           {...register('email')}
-          error={errors.email}
+          error={!!errors?.email}
           helperText={errors?.email?.message}
-          defaultValue={data?.email}
-          label="email"
-          variant="outlined"
+          defaultValue={data.email}
+          label="Email"
+          variant="standard"
+        />
+        <TextField
+          {...register('phone')}
+          error={!!errors?.phone}
+          helperText={errors?.phone?.message}
+          defaultValue={data.phone}
+          label="Телефон"
+          variant="standard"
         />
         <div className={styles.btnWrapper}>
           <Button className={styles.button} variant="contained" size="large" type="submit">
