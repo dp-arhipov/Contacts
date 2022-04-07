@@ -7,6 +7,7 @@ interface initialStateType {
   isLoading: boolean;
   error: string;
   data: Contact[];
+  searchString: string;
 }
 
 const findIndexById = (array: any, id: any): number => {
@@ -17,6 +18,7 @@ const initialState: initialStateType = {
   isLoading: false,
   error: '',
   data: [],
+  searchString: '',
 };
 
 export const contactsSlice = createSlice({
@@ -35,6 +37,9 @@ export const contactsSlice = createSlice({
       const deleteIndex = findIndexById(state.data, action.payload);
       state.data.splice(deleteIndex, 1);
     },
+    setSearchString(state, action) {
+      state.searchString = action.payload;
+    },
   },
   extraReducers: {
     [getContacts.fulfilled.type]: (state, action: PayloadAction<Contact[]>) => {
@@ -52,10 +57,9 @@ export const contactsSlice = createSlice({
   },
 });
 
-export const {addContacts, updateContact, deleteContact} = contactsSlice.actions;
-
-// Other code such as selectors can use the imported `RootState` type
+export const {addContacts, updateContact, deleteContact, setSearchString} = contactsSlice.actions;
 export const selectContactsData = (state: RootState) => state.contacts.data;
+export const searchString = (state: RootState) => state.contacts.searchString;
 export const lastContactId = (state: RootState) =>
   state.contacts.data[state.contacts.data.length - 1]?.id;
 

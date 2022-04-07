@@ -4,26 +4,50 @@ import Container from '@mui/material/Container';
 import ContactList from '../../components/ContactList';
 import SearchField from '../../components/SearchField';
 import {useAppDispatch, useAppSelector} from '../../hooks/redux';
-import {deleteContact, lastContactId, selectContactsData} from '../../store/reducers/contactsSlice';
+import {
+  deleteContact,
+  lastContactId,
+  searchString,
+  selectContactsData,
+} from '../../store/reducers/contactsSlice';
 import {getContacts} from '../../store/actions/contactsActions';
 import Header from '../../components/Header/Header';
 import Modal from '../../components/Modal';
 import ContactModifyForm from '../../components/ContactModifyForm';
 import ContactCard from '../../components/ContactCard';
 import {Contact} from '../../types';
-import AddButton from '../../components/AddButton';
 
 const Contacts: React.FC = () => {
   const dispatch = useAppDispatch();
   const contacts = useAppSelector(selectContactsData);
   const lastId = useAppSelector(lastContactId);
+  const searchStr = useAppSelector(searchString);
   const [open, setOpen] = useState(false);
   const [contactIdtoWorkWith, setContactIdtoWorkWith] = useState<Contact['id']>();
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleEdit = (id: Contact['id'] | undefined) => {
+  const handleEdit = (id?: Contact['id']) => {
     setContactIdtoWorkWith(id);
     handleOpen();
+  };
+  const filteredContacts = (contacts: Contact[], searchString: string) => {
+    if (searchString.length > 0) {
+      const foundContacts: Contact[] = [];
+      contacts.map(contact => {
+        const values = Object.values(contact);
+        for (const value of values) {
+          if (
+            typeof value == 'string' &&
+            value.toLowerCase().includes(searchString.toLowerCase().trim())
+          ) {
+            foundContacts.push(contact);
+            break;
+          }
+        }
+      });
+      return foundContacts;
+    } else return contacts;
   };
 
   const handleDelete = (id: Contact['id']) => {
@@ -37,8 +61,6 @@ const Contacts: React.FC = () => {
   const emptyContact: Contact = {
     id: lastId + 1,
     name: '',
-    email: '',
-    phone: '',
   };
   console.log(lastId);
   return (
@@ -49,32 +71,33 @@ const Contacts: React.FC = () => {
           data={contacts.filter(item => item.id == contactIdtoWorkWith)[0] || emptyContact}
         />
       </Modal>
-      <Header />
-      <Container maxWidth="sm" sx={{height: '100%'}}>
-        <div className={styles.wrapper}>
-          <div className={styles.searchField}>
-            <SearchField />
-          </div>
-
-          <div className={styles.contactList}>
-            <div className={styles.buttonWrapper}>
-              <AddButton onClick={() => handleEdit(undefined)} />
+      <div className={styles.header}>
+        <Header />
+      </div>
+      <div className={styles.container}>
+        <Container maxWidth="sm" sx={{height: '100%'}}>
+          <div className={styles.wrapper}>
+            <div className={styles.searchField}>
+              <SearchField onAdd={() => handleEdit()} />
             </div>
-            <ContactList>
-              {contacts.map(contact => {
-                return (
-                  <ContactCard
-                    key={contact.id}
-                    data={contact}
-                    onEdit={() => handleEdit(contact.id)}
-                    onDelete={() => handleDelete(contact.id)}
-                  />
-                );
-              })}
-            </ContactList>
+
+            <div className={styles.contactList}>
+              <ContactList>
+                {filteredContacts(contacts, searchStr).map(contact => {
+                  return (
+                    <ContactCard
+                      key={contact.id}
+                      data={contact}
+                      onEdit={() => handleEdit(contact.id)}
+                      onDelete={() => handleDelete(contact.id)}
+                    />
+                  );
+                })}
+              </ContactList>
+            </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </div>
   );
 };

@@ -18,7 +18,7 @@ export default function MenuAppBar() {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-          Contacts
+          Contact manager
         </Typography>
 
         <IconButton size="large" onClick={handleLogOut} color="inherit">
