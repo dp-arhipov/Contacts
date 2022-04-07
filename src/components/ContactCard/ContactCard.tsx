@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import {Contact} from '../../types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import Typography from '@mui/material/Typography';
 interface ContactCardProps {
   data: Contact;
   onEdit: () => void;
@@ -21,9 +22,33 @@ const ContactCard: React.FC<ContactCardProps> = ({data, onEdit, onDelete}) => {
         <ListItemAvatar onClick={onEdit}>
           <Avatar alt="Profile Picture" />
         </ListItemAvatar>
-        <ListItemText primary={data.name} secondary={data.email} onClick={onEdit} />
+        <ListItemText
+          primary={
+            <Typography
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                color: 'text.primary',
+              }}
+            >
+              {data.name}
+            </Typography>
+          }
+          secondary={
+            <Typography
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                color: 'text.secondary',
+              }}
+            >
+              {data.email}
+            </Typography>
+          }
+          onClick={onEdit}
+        />
         <Fragment>
-          <IconButton edge="start" onClick={onEdit}>
+          <IconButton edge="start" onClick={onEdit} sx={{pl: '2rem'}}>
             <EditIcon />
           </IconButton>
           <IconButton edge="end" onClick={onDelete}>
