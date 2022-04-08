@@ -22,6 +22,7 @@ const Contacts: React.FC = () => {
   const contacts = useAppSelector(selectContactsData);
   const lastId = useAppSelector(lastContactId);
   const searchStr = useAppSelector(searchString);
+  const contactsData = useAppSelector(selectContactsData);
   const [open, setOpen] = useState(false);
   const [contactIdtoWorkWith, setContactIdtoWorkWith] = useState<Contact['id']>();
 
@@ -55,20 +56,21 @@ const Contacts: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getContacts());
+    if (contactsData.length == 0) {
+      dispatch(getContacts());
+    }
   }, [dispatch]);
 
   const emptyContact: Contact = {
     id: lastId + 1,
     name: '',
   };
-  console.log(lastId);
   return (
     <div className={styles.contacts}>
       <Modal isOpen={open} onClose={handleClose}>
         <ContactModifyForm
           onClose={handleClose}
-          data={contacts.filter(item => item.id == contactIdtoWorkWith)[0] || emptyContact}
+          data={contacts.filter((item: any) => item.id == contactIdtoWorkWith)[0] || emptyContact}
         />
       </Modal>
       <div className={styles.header}>

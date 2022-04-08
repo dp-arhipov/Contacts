@@ -40,6 +40,9 @@ export const contactsSlice = createSlice({
     setSearchString(state, action) {
       state.searchString = action.payload;
     },
+    cleanAll() {
+      return {...initialState};
+    },
   },
   extraReducers: {
     [getContacts.fulfilled.type]: (state, action: PayloadAction<Contact[]>) => {
@@ -57,7 +60,8 @@ export const contactsSlice = createSlice({
   },
 });
 
-export const {addContacts, updateContact, deleteContact, setSearchString} = contactsSlice.actions;
+export const {addContacts, updateContact, deleteContact, setSearchString, cleanAll} =
+  contactsSlice.actions;
 export const selectContactsData = (state: RootState) => state.contacts.data;
 export const searchString = (state: RootState) => state.contacts.searchString;
 export const lastContactId = (state: RootState) =>
