@@ -1,32 +1,23 @@
-import {useEffect, useState} from 'react';
-import {setUser, logout as logOut} from '../store/reducers/userSlice';
+import {cleanAll as cleanUser} from '../store/reducers/userSlice';
+import {cleanAll as cleanContacts} from '../store/reducers/contactsSlice';
+
 import {login as logIn} from '../store/actions/userActions';
 import {AuthData} from '../types';
 import {useAppDispatch} from './redux';
 
 function useAuth() {
-  const [isLocalCheckFinished, setIsLocalCheckFinished] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const user = window.localStorage.getItem('user');
-    if (user) {
-      dispatch(setUser(JSON.parse(user)));
-    }
-    setIsLocalCheckFinished(true);
-  }, [dispatch]);
-
   const login = async (loginData: AuthData) => {
-    const user = await dispatch(logIn(loginData));
-    window.localStorage.setItem('user', JSON.stringify(user.payload));
+    await dispatch(logIn(loginData));
   };
 
   const logout = () => {
-    dispatch(logOut());
-    window.localStorage.removeItem('user');
+    dispatch(cleanUser());
+    dispatch(cleanContacts());
   };
 
-  return {isLocalCheckFinished, logout, login};
+  return {logout, login};
 }
 
 export default useAuth;
