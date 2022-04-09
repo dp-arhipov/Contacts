@@ -65,6 +65,9 @@ export const {addContacts, updateContact, deleteContact, setSearchString, cleanA
 export const selectContactsData = (state: RootState) => state.contacts.data;
 export const searchString = (state: RootState) => state.contacts.searchString;
 export const lastContactId = (state: RootState) =>
-  state.contacts.data[state.contacts.data.length - 1]?.id;
+  state.contacts.data.reduce(
+    (maxId: number, item: Contact) => (item.id > maxId ? (maxId = item.id) : maxId),
+    0
+  );
 
 export default contactsSlice.reducer;
