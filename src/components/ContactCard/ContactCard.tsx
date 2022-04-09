@@ -15,12 +15,22 @@ interface ContactCardProps {
   onDelete: () => void;
 }
 
+function colorAvatar(id: number) {
+  if (id) {
+    const sx = {
+      bgcolor: `hsla(${(id / 10) * 360}, 100%, 40%, 1)`,
+    };
+    console.log(sx);
+    return {sx};
+  }
+}
+
 const ContactCard: React.FC<ContactCardProps> = ({data, onEdit, onDelete}) => {
   return (
     <div className={styles.contactCard}>
       <ListItem button>
         <ListItemAvatar onClick={onEdit}>
-          <Avatar alt="Profile Picture" />
+          <Avatar alt="Profile Picture" {...colorAvatar(data.id)} />
         </ListItemAvatar>
         <ListItemText
           primary={
