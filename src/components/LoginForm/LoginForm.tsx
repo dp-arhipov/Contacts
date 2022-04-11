@@ -44,7 +44,7 @@ const LoginForm: React.FC = () => {
   };
 
   useEffect(() => {
-    if (userData.error == 'NOT_CORRECT_AUTH_DATA') {
+    if (userData.error == 'NOT_CORRECT_AUTH_DATA' && !userData.isLoading) {
       setError('login', {
         type: 'server',
         message: 'Неверный логин или пароль',
@@ -52,25 +52,21 @@ const LoginForm: React.FC = () => {
     } else if (userData.id) {
       navigate('/');
     }
-  }, [userData.error, userData.id]);
+  }, [userData.error, userData.isLoading]);
 
   return (
     <div className={styles.loginForm}>
       <form className={styles.form} onSubmit={handleSubmit(handleForm)}>
         <TextField
           {...register('login')}
-
           error={!!errors.login}
-
           helperText={errors?.login?.message}
           label="Логин"
           variant="outlined"
         />
         <TextField
           {...register('password')}
-
           error={!!errors.password}
-
           helperText={errors?.password?.message}
           label="Пароль"
           variant="outlined"
