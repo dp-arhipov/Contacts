@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import styles from './contactModifyForm.module.scss';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {useForm} from 'react-hook-form';
+import {useForm, SubmitHandler} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {string, object} from 'yup';
 import {addContacts, updateContact} from '../../store/reducers/contactsSlice';
@@ -13,6 +13,12 @@ import {Typography} from '@mui/material';
 interface ContactModalContent {
   onClose: () => void;
   data: Contact;
+}
+
+interface FormValues {
+  name: string;
+  email: string;
+  phone: string;
 }
 
 const ContactModifyForm: React.FC<ContactModalContent> = ({onClose, data}) => {
@@ -42,12 +48,12 @@ const ContactModifyForm: React.FC<ContactModalContent> = ({onClose, data}) => {
     handleSubmit,
     setError,
     formState: {errors},
-  } = useForm({
+  } = useForm<FormValues>({
     mode: 'onSubmit',
     resolver: yupResolver(schema),
   });
 
-  const handleForm = async (formData: any) => {
+  const handleForm: SubmitHandler<FormValues> = async formData => {
     if (isNewContact) {
       dispatch(
         addContacts([{name: formData.name, email: formData.email, id: data.id, phone: data.phone}])

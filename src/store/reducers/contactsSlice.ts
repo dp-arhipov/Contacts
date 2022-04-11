@@ -10,8 +10,8 @@ interface initialStateType {
   searchString: string;
 }
 
-const findIndexById = (array: any, id: any): number => {
-  return array.findIndex((item: any) => item.id == id);
+const findIndexById = (array: Contact[], id: number): number => {
+  return array.findIndex((item: Contact) => item.id == id);
 };
 
 const initialState: initialStateType = {

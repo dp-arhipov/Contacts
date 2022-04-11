@@ -3,7 +3,7 @@ import styles from './loginForm.module.scss';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {string, object} from 'yup';
-import {useForm} from 'react-hook-form';
+import {SubmitHandler, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import {useNavigate} from 'react-router-dom';
@@ -11,6 +11,10 @@ import useAuth from '../../hooks/useAuth';
 import {selectUserData} from '../../store/reducers/userSlice';
 import {useAppSelector} from '../../hooks/redux';
 
+interface FormValues {
+  login: string;
+  password: string;
+}
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const userData = useAppSelector(selectUserData);
@@ -30,12 +34,12 @@ const LoginForm: React.FC = () => {
     handleSubmit,
     setError,
     formState: {errors},
-  } = useForm({
+  } = useForm<FormValues>({
     mode: 'onSubmit',
     resolver: yupResolver(schema),
   });
 
-  const handleForm = async (data: any) => {
+  const handleForm: SubmitHandler<FormValues> = async data => {
     await login({login: data.login, password: data.password});
   };
 
@@ -55,14 +59,18 @@ const LoginForm: React.FC = () => {
       <form className={styles.form} onSubmit={handleSubmit(handleForm)}>
         <TextField
           {...register('login')}
-          error={errors?.login}
+
+          error={!!errors.login}
+
           helperText={errors?.login?.message}
           label="Логин"
           variant="outlined"
         />
         <TextField
           {...register('password')}
-          error={errors?.password}
+
+          error={!!errors.password}
+
           helperText={errors?.password?.message}
           label="Пароль"
           variant="outlined"

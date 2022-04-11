@@ -70,7 +70,9 @@ const Contacts: React.FC = () => {
       <Modal isOpen={open} onClose={handleClose}>
         <ContactModifyForm
           onClose={handleClose}
-          data={contacts.filter((item: any) => item.id == contactIdtoWorkWith)[0] || emptyContact}
+          data={
+            contacts.filter((item: Contact) => item.id == contactIdtoWorkWith)[0] || emptyContact
+          }
         />
       </Modal>
       <div className={styles.header}>
