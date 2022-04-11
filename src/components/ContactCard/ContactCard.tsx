@@ -57,7 +57,7 @@ const ContactCard: React.FC<ContactCardProps> = ({data, onEdit, onDelete}) => {
           onClick={onEdit}
         />
         <Fragment>
-          <IconButton edge="start" onClick={onEdit} sx={{pl: '2rem'}}>
+          <IconButton edge="start" onClick={onEdit} sx={{ml: '0.5rem'}}>
             <EditIcon />
           </IconButton>
           <IconButton edge="end" onClick={onDelete}>
