@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from './loginForm.module.scss';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-// import {login} from '../../store/actions/userActions';
 import {string, object} from 'yup';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import {useNavigate} from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import {selectUserData} from '../../store/reducers/userSlice';
+import {useAppSelector} from '../../hooks/redux';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const userData = useAppSelector(selectUserData);
   const {login} = useAuth();
 
   const schema = object({
@@ -35,22 +37,32 @@ const LoginForm: React.FC = () => {
 
   const handleForm = async (data: any) => {
     await login({login: data.login, password: data.password});
-    navigate('/');
   };
+
+  useEffect(() => {
+    if (userData.error == 'NOT_CORRECT_AUTH_DATA') {
+      setError('login', {
+        type: 'server',
+        message: 'Неверный логин или пароль',
+      });
+    } else if (userData.id) {
+      navigate('/');
+    }
+  }, [userData.error, userData.id]);
 
   return (
     <div className={styles.loginForm}>
       <form className={styles.form} onSubmit={handleSubmit(handleForm)}>
         <TextField
           {...register('login')}
-          error={errors.login}
+          error={errors?.login}
           helperText={errors?.login?.message}
           label="Логин"
           variant="outlined"
         />
         <TextField
           {...register('password')}
-          error={errors.password}
+          error={errors?.password}
           helperText={errors?.password?.message}
           label="Пароль"
           variant="outlined"
