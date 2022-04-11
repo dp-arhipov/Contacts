@@ -20,7 +20,6 @@ function colorAvatar(id: number) {
     const sx = {
       bgcolor: `hsla(${(id / 10) * 360}, 100%, 40%, 1)`,
     };
-    console.log(sx);
     return {sx};
   }
 }
