@@ -13,7 +13,7 @@ import {
 import {getContacts} from '../../store/actions/contactsActions';
 import Header from '../../components/Header/Header';
 import Modal from '../../components/Modal';
-import ContactModifyForm from '../../components/ContactModifyForm';
+import ContactModifyForm from '../../components/ContactModifyForm/ContactModifyForm';
 import ContactCard from '../../components/ContactCard';
 import {Contact} from '../../types';
 
