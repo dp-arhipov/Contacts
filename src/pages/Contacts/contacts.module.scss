@@ -1,0 +1,38 @@
+$small: 360px;
+$medium: 600px;
+
+.contacts {
+  height: 100%;
+
+  .wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .searchField {
+    margin-top: 6rem;
+    @media screen and (max-width: $medium) {
+      margin-top: 0rem;
+    }
+  }
+
+  .contactList {
+    margin-top: 3rem;
+    min-height: 0;
+    @media screen and (max-width: $medium) {
+      margin-top: 1rem;
+    }
+  }
+
+  .buttonWrapper {
+    display: flex;
+    justify-content: center;
+  }
+  .header {
+    height: 10%;
+  }
+  .container {
+    height: 90%;
+  }
+}
